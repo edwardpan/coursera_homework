@@ -7,10 +7,15 @@ function [J, grad] = lrCostFunction(theta, X, y, lambda)
 
 % Initialize some useful values
 m = length(y); % number of training examples
+% theta_use = [0; ones(size(theta, 1)-1, 1)];
+theta_use = eye(size(theta, 1));
+theta_use(1,1) = 0;
+
 
 % You need to return the following variables correctly 
-J = 0;
-grad = zeros(size(theta));
+h = sigmoid(X * theta);
+J = -1/m * sum(y .* log(h) + (1-y) .* log(1-h)) + lambda/2/m * theta' * theta_use * theta;
+grad = 1/m * X' * (h-y) + lambda / m * (theta_use * theta);
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta.
