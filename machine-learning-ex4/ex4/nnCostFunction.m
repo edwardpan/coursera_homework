@@ -73,15 +73,22 @@ z3 = a2 * Theta2';
 a3 = sigmoid(z3);
 
 h = -y .* log(a3) - (1 - y) .* log(1-a3);
-J = 1/m * sum(sum( h )) + lambda/2/m * ( sum(sum(Theta1 .^ 2)) + sum(sum(Theta2 .^ 2)) );
+J = 1/m * sum(sum( h )) + lambda/2/m * ( sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)) );
 
-delta2 = (a3 - y) * Theta2 .* sigmoidGradient(z2);
-Theta1_grad = 1/m * sum(sum(delta2 * X'));
+Theta2_no_bias = eye(size(a2, 2));
+Theta2_no_bias(1, 1) = 0;
 
-Theta2_grad = sigmoidGradient(z3);
+error3 = a3 - y;
+Theta2_grad = error3' * a2;
+Theta2_grad = 1/m * Theta2_grad + lambda/m * (Theta2 * Theta2_no_bias);
 
+Theta1_no_bias = eye(size(X, 2));
+Theta1_no_bias(1, 1) = 0;
 
-
+z2_gradient = sigmoidGradient(z2);
+error2 = error3 * Theta2(:, 2:end) .* z2_gradient;
+Theta1_grad = error2' * X;
+Theta1_grad = 1/m * Theta1_grad + lambda/m * (Theta1 * Theta1_no_bias);
 
 
 
