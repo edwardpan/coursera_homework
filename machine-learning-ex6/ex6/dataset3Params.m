@@ -22,12 +22,25 @@ sigma = 0.3;
 %  Note: You can compute the prediction error using 
 %        mean(double(predictions ~= yval))
 %
+params = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 
+param_len = length(params);
 
+min_error = 1;
 
+for c_i=1:param_len
+  for s_i=1:param_len
+    model= svmTrain(X, y, params(c_i), @(x1, x2) gaussianKernel(x1, x2, params(s_i))); 
+    preds = svmPredict(model, Xval);
+    error = mean(double(preds ~= yval));
+    if error < min_error
+      min_error = error;
+      C = params(c_i);
+      sigma = params(s_i);
+    end
+end
 
-
-
+fprintf(['The best C and sigma is: C = %f; sigma = %f\n'], C, sigma);
 
 % =========================================================================
 

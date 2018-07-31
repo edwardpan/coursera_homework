@@ -16,8 +16,14 @@ sim = 0;
 %
 %
 
+m = size(x1, 1);
 
-
+ins = 0;
+for i=1:m
+  ins = ins + (x1(i) - x2(i)) ^ 2;
+end
+  
+sim = exp(- ins / (2 * sigma ^ 2));
 
 
 
