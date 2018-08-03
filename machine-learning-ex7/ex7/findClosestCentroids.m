@@ -20,9 +20,18 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
+m = size(X, 1);
 
-
-
+for i=1:m
+  x = X(i, :);
+  values = zeros(K, 1);
+  for j=1:K
+    c_v = centroids(j,:);
+    values(j) = 1/m * sum((x - c_v) .^ 2);
+  end
+  [_, index] = min(values);
+  idx(i)=index;
+end
 
 
 
