@@ -29,7 +29,7 @@ for i=1:m
     c_v = centroids(j,:);
     values(j) = 1/m * sum((x - c_v) .^ 2);
   end
-  [_, index] = min(values);
+  [v, index] = min(values);
   idx(i)=index;
 end
 
